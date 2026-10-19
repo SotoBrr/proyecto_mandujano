@@ -1,0 +1,783 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Panel de administración de Lombana Therapy para gestionar citas, clientes, terapias y reportes."
+  >
+
+  <meta name="author" content="Lombana Therapy">
+
+  <title>Panel administrador - Lombana Therapy</title>
+
+  <!-- FAVICON -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="assets/img/lombana-therapy-logo.png"
+  >
+
+  <!-- ESTILOS PRINCIPALES -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/accesibilidad.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+
+<body>
+
+  <!-- ==================================
+       ENCABEZADO ADMINISTRADOR
+  ================================== -->
+
+  <header class="header">
+
+    <div class="logo">
+      <h1>Lombana Therapy</h1>
+      <p>Panel administrador</p>
+    </div>
+
+    <nav class="nav" aria-label="Navegación del administrador">
+
+      <button
+        type="button"
+        class="nav-button"
+        onclick="cerrarSesion()"
+      >
+        Cerrar sesión
+      </button>
+
+    </nav>
+
+  </header>
+
+  <!-- ==================================
+       CONTENIDO PRINCIPAL
+  ================================== -->
+
+  <main id="contenido-principal" tabindex="-1">
+
+    <!-- ==================================
+         DASHBOARD DE CITAS
+    ================================== -->
+
+    <section
+      class="section"
+      aria-labelledby="titulo-dashboard"
+    >
+
+      <h2 id="titulo-dashboard">
+        Dashboard de citas
+      </h2>
+
+      <!-- FILTROS DEL DASHBOARD -->
+      <div class="admin-box">
+
+        <label for="fecha-inicio">
+          Fecha inicio
+        </label>
+
+        <input
+          type="date"
+          id="fecha-inicio"
+          name="fecha-inicio"
+        >
+
+        <label for="fecha-fin">
+          Fecha fin
+        </label>
+
+        <input
+          type="date"
+          id="fecha-fin"
+          name="fecha-fin"
+        >
+
+        <button
+          type="button"
+          class="btn-primary"
+          onclick="cargarDashboard()"
+        >
+          Generar reporte
+        </button>
+
+      </div>
+
+      <!-- RESULTADOS DEL DASHBOARD -->
+      <div class="dashboard-grid" aria-live="polite">
+
+        <!-- TERAPIA MÁS AGENDADA -->
+        <div class="admin-box">
+          <h3>Terapia más agendada</h3>
+
+          <p id="terapia-mas-agendada">
+            Sin datos
+          </p>
+        </div>
+
+        <!-- DÍA MÁS AGENDADO -->
+        <div class="admin-box">
+          <h3>Día más agendado</h3>
+
+          <p id="dia-mas-agendado">
+            Sin datos
+          </p>
+        </div>
+
+        <!-- CLIENTE MÁS FRECUENTE -->
+        <div class="admin-box">
+          <h3>Cliente más frecuente</h3>
+
+          <p id="cliente-mas-frecuente">
+            Sin datos
+          </p>
+        </div>
+
+        <!-- GÉNERO QUE MÁS AGENDA -->
+        <div class="admin-box">
+          <h3>Género que más agenda</h3>
+
+          <p id="genero-mas-agenda">
+            Sin datos
+          </p>
+        </div>
+
+        <!-- GANANCIAS -->
+        <div class="admin-box">
+          <h3>Ganancias</h3>
+
+          <p id="ganancias-totales">
+            $0 MXN
+          </p>
+
+          <small>
+            No incluye aromaterapia ni citas canceladas.
+          </small>
+        </div>
+
+        <!-- CITAS CANCELADAS -->
+        <div class="admin-box">
+          <h3>Citas canceladas</h3>
+
+          <p id="total-cancelaciones">
+            0 cancelaciones
+          </p>
+        </div>
+
+      </div>
+
+      <!-- DETALLE DE CANCELACIONES -->
+      <div class="admin-box">
+
+        <h3>Detalle de cancelaciones</h3>
+
+        <div class="table-container">
+
+          <table class="admin-table">
+
+            <thead>
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Paciente</th>
+                <th scope="col">Terapia</th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabla-cancelaciones">
+              <tr>
+                <td colspan="5">
+                  Genera un reporte para consultar cancelaciones.
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================================
+         CITAS AGENDADAS
+    ================================== -->
+
+    <section
+      class="section"
+      aria-labelledby="titulo-citas"
+    >
+
+      <h2 id="titulo-citas">
+        Citas agendadas
+      </h2>
+
+      <div class="admin-box">
+
+        <label for="fecha-citas">
+          Filtrar por fecha
+        </label>
+
+        <input
+          type="date"
+          id="fecha-citas"
+          name="fecha-citas"
+          onchange="cargarCitasAdmin()"
+        >
+
+        <div class="table-container">
+
+          <table class="admin-table">
+
+            <thead>
+              <tr>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Terapia</th>
+                <th scope="col">Paciente</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Status</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabla-citas">
+
+              <tr>
+                <td colspan="7">
+                  Cargando citas...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================================
+         CLIENTES REGISTRADOS
+    ================================== -->
+
+    <section
+      class="section"
+      aria-labelledby="titulo-clientes"
+    >
+
+      <h2 id="titulo-clientes">
+        Clientes registrados
+      </h2>
+
+      <!-- FORMULARIO DE CLIENTES -->
+      <div class="admin-box admin-form-box">
+
+        <h3 id="titulo-form-cliente">
+          Agregar nuevo cliente
+        </h3>
+
+        <form
+          id="form-cliente"
+          onsubmit="guardarCliente(event)"
+        >
+
+          <!-- ID PARA EDICIÓN -->
+          <input
+            type="hidden"
+            id="cliente-id-edicion"
+          >
+
+          <div class="admin-form-grid">
+
+            <!-- NOMBRE -->
+            <div>
+              <label for="cliente-nombre">
+                Nombre completo
+              </label>
+
+              <input
+                type="text"
+                id="cliente-nombre"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <!-- CORREO -->
+            <div>
+              <label for="cliente-email">
+                Correo electrónico
+              </label>
+
+              <input
+                type="email"
+                id="cliente-email"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <!-- TELÉFONO -->
+            <div>
+              <label for="cliente-telefono">
+                Teléfono
+              </label>
+
+              <input
+                type="tel"
+                id="cliente-telefono"
+                autocomplete="tel"
+              >
+            </div>
+
+            <!-- GÉNERO -->
+            <div>
+              <label for="cliente-genero">
+                Género
+              </label>
+
+              <select
+                id="cliente-genero"
+                required
+              >
+                <option value="">
+                  Selecciona una opción
+                </option>
+
+                <option value="femenino">
+                  Femenino
+                </option>
+
+                <option value="masculino">
+                  Masculino
+                </option>
+
+                <option value="otro">
+                  Otro
+                </option>
+              </select>
+            </div>
+
+            <!-- CONTRASEÑA -->
+            <div>
+
+              <label
+                for="cliente-password"
+                id="label-cliente-password"
+              >
+                Contraseña temporal
+              </label>
+
+              <input
+                type="password"
+                id="cliente-password"
+                minlength="6"
+                autocomplete="new-password"
+                required
+              >
+
+              <small
+                id="ayuda-cliente-password"
+                class="oculto"
+              >
+                Déjala vacía para conservar la contraseña actual.
+              </small>
+
+            </div>
+
+          </div>
+
+          <!-- BOTONES -->
+          <div class="admin-actions">
+
+            <button
+              type="submit"
+              class="btn-primary"
+              id="btn-guardar-cliente"
+            >
+              Agregar cliente
+            </button>
+
+            <button
+              type="button"
+              class="btn-secondary oculto"
+              id="btn-cancelar-edicion-cliente"
+              onclick="limpiarFormularioCliente()"
+            >
+              Cancelar edición
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- LISTADO DE CLIENTES -->
+      <div class="admin-box admin-panel-margin">
+
+        <h3>
+          Listado de clientes
+        </h3>
+
+        <div class="table-container">
+
+          <table class="admin-table">
+
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Género</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabla-clientes">
+
+              <tr>
+                <td colspan="5">
+                  Cargando clientes...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+<!-- ==================================
+     GESTIÓN DE ADMINISTRADORES
+================================== -->
+
+<section class="section"
+         aria-labelledby="titulo-nuevo-admin">
+
+  <h2 id="titulo-nuevo-admin">
+    Gestión de administradores
+  </h2>
+
+  <div class="admin-box admin-form-box">
+
+    <h3>Invitar nuevo administrador</h3>
+
+    <p>
+      Envía una invitación para que otro administrador
+      pueda acceder al sistema Lombana Therapy.
+    </p>
+
+    <form id="form-invitar-admin">
+
+      <div class="admin-form-grid">
+
+        <div>
+          <label for="nuevo-admin-nombre">
+            Nombre completo
+          </label>
+
+          <input
+            type="text"
+            id="nuevo-admin-nombre"
+            minlength="2"
+            maxlength="100"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="nuevo-admin-email">
+            Correo electrónico
+          </label>
+
+          <input
+            type="email"
+            id="nuevo-admin-email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+      </div>
+
+      <div class="admin-actions">
+        <button
+          type="button"
+          id="btn-invitar-admin"
+          class="btn-primary"
+          disabled
+        >
+          Enviar invitación
+        </button>
+      </div>
+
+      <p id="mensaje-invitar-admin"
+         role="status"
+         aria-live="polite">
+        Las invitaciones estarán disponibles
+        después de completar la configuración.
+      </p>
+
+    </form>
+
+  </div>
+
+</section>
+
+    <!-- ==================================
+         GESTIÓN DE TERAPIAS
+    ================================== -->
+
+    <section
+      class="section"
+      aria-labelledby="titulo-terapias-admin"
+    >
+
+      <h2 id="titulo-terapias-admin">
+        Administrar terapias
+      </h2>
+
+      <!-- FORMULARIO DE TERAPIAS -->
+      <div class="admin-box admin-form-box">
+
+        <h3 id="titulo-form-terapia">
+          Agregar nueva terapia
+        </h3>
+
+        <form
+          id="form-terapia"
+          onsubmit="guardarTerapia(event)"
+        >
+
+          <!-- ID DE TERAPIA EN EDICIÓN -->
+          <input
+            type="hidden"
+            id="terapia-id-edicion"
+          >
+
+          <div class="admin-form-grid">
+
+            <!-- NOMBRE DE TERAPIA -->
+            <div>
+              <label for="terapia-admin-nombre">
+                Nombre
+              </label>
+
+              <input
+                type="text"
+                id="terapia-admin-nombre"
+                required
+              >
+            </div>
+
+            <!-- SLUG -->
+            <div>
+              <label for="terapia-admin-slug">
+                Enlace / slug
+              </label>
+
+              <input
+                type="text"
+                id="terapia-admin-slug"
+                placeholder="masaje-relajante"
+              >
+            </div>
+
+            <!-- DURACIÓN -->
+            <div>
+              <label for="terapia-admin-duracion">
+                Duración en minutos
+              </label>
+
+              <input
+                type="number"
+                id="terapia-admin-duracion"
+                min="1"
+                value="60"
+                required
+              >
+            </div>
+
+            <!-- PRECIO -->
+            <div>
+              <label for="terapia-admin-precio">
+                Precio
+              </label>
+
+              <input
+                type="text"
+                id="terapia-admin-precio"
+                placeholder="400"
+              >
+            </div>
+
+            <!-- IMAGEN -->
+            <div>
+              <label for="terapia-admin-imagen">
+                Ruta o URL de imagen
+              </label>
+
+              <input
+                type="text"
+                id="terapia-admin-imagen"
+                placeholder="assets/img/nueva-terapia.jpg"
+              >
+            </div>
+
+            <!-- ESTADO -->
+            <div>
+              <label for="terapia-admin-activo">
+                Visible para clientes
+              </label>
+
+              <select id="terapia-admin-activo">
+                <option value="true">
+                  Activa
+                </option>
+
+                <option value="false">
+                  Inactiva
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- DESCRIPCIONES -->
+          <div class="admin-form-grid">
+
+            <!-- DESCRIPCIÓN CORTA -->
+            <div>
+              <label for="terapia-admin-descripcion">
+                Descripción corta
+              </label>
+
+              <textarea
+                id="terapia-admin-descripcion"
+                placeholder="Texto que aparece en la tarjeta de la terapia"
+              ></textarea>
+            </div>
+
+            <!-- DESCRIPCIÓN LARGA -->
+            <div>
+              <label for="terapia-admin-descripcion-larga">
+                Descripción detallada
+              </label>
+
+              <textarea
+                id="terapia-admin-descripcion-larga"
+                placeholder="Información que aparece al abrir el detalle de la terapia"
+              ></textarea>
+            </div>
+
+          </div>
+
+          <!-- BOTONES -->
+          <div class="admin-actions">
+
+            <button
+              type="submit"
+              class="btn-primary"
+            >
+              Guardar terapia
+            </button>
+
+            <button
+              type="button"
+              class="btn-secondary oculto"
+              id="btn-cancelar-edicion-terapia"
+              onclick="limpiarFormularioTerapia()"
+            >
+              Cancelar edición
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- TABLA DE TERAPIAS -->
+      <div class="admin-box admin-panel-margin">
+
+        <h3>
+          Terapias registradas
+        </h3>
+
+        <div class="table-container">
+
+          <table class="admin-table">
+
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Duración</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody id="tabla-terapias-admin">
+
+              <tr>
+                <td colspan="5">
+                  Cargando terapias...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================================
+       JAVASCRIPT DEL PROYECTO
+  ================================== -->
+
+  <!-- LIBRERÍA LOCAL DE SUPABASE -->
+  <script src="js/vendor/supabase.bundle.js"></script>
+
+  <!-- CONFIGURACIÓN GENERADA DESDE .env -->
+  <script src="js/config.js"></script>
+
+  <!-- CONEXIÓN A SUPABASE -->
+  <script src="js/supabase.js"></script>
+
+  <!-- AUTENTICACIÓN -->
+  <script src="js/auth.js"></script>
+
+  <!-- ADMINISTRACIÓN -->
+  <script src="js/admin.js"></script>
+  <script src="js/admin-gestion.js"></script>
+  <script src="js/verificar-admin-invitaciones.js"></script>
+
+  <script defer src="js/accesibilidad.js"></script>
+  <script defer src="js/chatbot.js"></script>
+</body>
+</html>
